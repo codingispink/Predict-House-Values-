@@ -1,4 +1,5 @@
 # Predicting House Values using KNN, Regression Tree &amp; Regression Line in R
+**Goal of the Project:** Predict House Values based on its features employing KNN, Regression Tree & Regression Line. Use appropriate evaluation metrics to measure the performance of the aforementioned methods. 
 ## Summary
 I. Concepts
 
@@ -56,7 +57,7 @@ pairs(df[,c(1,2,3,4,6)], col = "darkgreen")
 ```
 
 Since the ocean_proximity (or proximity) is a categorical column with texts, we can't really compare them like above. Therefore, I am going to turn these texts into numbers and compare them separately:
-
+4
 ```
 #This has already been updated in Excel
 <1H OCEAN = 1
@@ -127,7 +128,7 @@ options(scipen =999) #avoid scientific notation
 knnMetrics
 ```
 ### 4. Predict House Values through Regression Tree
-
+Unlike the other method, it is unnecessary to normalize data for regression tree and regression line. Therefore, we will train the regression tree with the non-standardized data set.
 **Train the regression tree using the non standardized data**
 ```{r }
 rtree <- train(median_house_value~., train_set, method ='rpart')
@@ -138,6 +139,9 @@ rtree
 rpart.plot(rtree$finalModel, digit =-3)
 ```
 ![000012](https://github.com/codingispink/Predict-House-Values-/assets/138828365/cee4a5ce-2dd6-46d3-a551-3879fad23223)
+
+**Interpretation** 
+In this regression tree, the model predicts that those with median income less than $50,400 (5.04 in original data) will likely purchase a house that is around $173,547 while those with higher salary will likely purchase a house that costs up to $331,798. In the group of buyers that get paid less than $50,400, those with median income less than $30,070 (or 3.07) will likely to purchase a house that is around $135,015 and those with higher median income than that will purchase a house that is around $209,384.
 
 **Save the prediction results**
 ```{r }
@@ -196,7 +200,7 @@ lmMetrics   75397.80 0.5696283 55730.46 0.4316204
 ```
 
 #### Conclusion
-According to the result above, the best model is the KNN. KNN has the lowest RMSE, MAE and MAPE. On the other hand, Regression Tree is the worst model.
+According to the result above, the best model to predict house values is the KNN. KNN has the lowest RMSE, MAE and MAPE. On the other hand, Regression Tree is the worst model.
 
 ## ACKNOWLEDGEMENT
 
