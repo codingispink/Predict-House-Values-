@@ -6,7 +6,7 @@ I. Concepts
 II. Build Models to Predict House Values
 1. Preparation
 2. Data Exploration & Preprocessing
-3. Predict House Values through KNN Clustering
+3. Predict House Values through KNN 
 4. Predict House Values through Regression Tree
 5. Predict House Values through Regression Line  
 6. Compare three models
