@@ -12,7 +12,7 @@ II. Build Models to Predict House Values
 6. Compare three models
 ## I. Concepts
 
-**KNN**: predicts the house value based on the label of its neighbor. KNN assumes that similar data points lie closer in spatial coordinates.
+**KNN**: "*non-parametric, supervised learning classifier, which uses proximity to make classifications or predictions about the grouping of an individual data point."*
 
 **Regression Tree**: constructs a tree model to predict the house value based on the decision rules. It recursively splits the data into subsets based on the info variables.
 
