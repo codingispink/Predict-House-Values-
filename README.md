@@ -207,3 +207,5 @@ According to the result above, the best model to predict house values is the KNN
 [1] California Housing Price Prediction: https://www.kaggle.com/code/suprabhatsk/california-housing-prices-prediction/input?select=housing.csv
 
 [2] Professor De Liu, Lab 5-1 Numerical Prediction, IDSC 4444 - Descriptive and Predictive Analytics
+
+[3] California Housing Value Prediction: https://www.kaggle.com/code/anuvrat29/california-housing-value-prediction
