@@ -47,8 +47,7 @@ df <- df[complete.cases(df), ]
 ```
 You can also create a histogram to see the median house value distribution. According to this histogram, the data is skewed to the right with a spike around the $500,000. 
 
-
-<img width="300" alt="000012" src="https://github.com/codingispink/Predict-House-Values-/assets/138828365/1f9c860a-54f2-48e6-9985-05fc909b5d54">
+<img width="525" alt="dis" src="https://github.com/codingispink/Predict-House-Values-With-KNN-Regression-Tree-and-Regression-Line/assets/138828365/0a8effa6-b372-4a10-9790-0365c36676e0">
 
 
 Next, you can examine the relationship between features and the median house value. Instead of comparing each feature to the house value, we can do as below to compare all of them at once:
@@ -56,20 +55,10 @@ Next, you can examine the relationship between features and the median house val
 pairs(df[,c(1,2,3,4,6)], col = "darkgreen")
 ```
 
-Since the ocean_proximity (or proximity) is a categorical column with texts, we can't really compare them like above. Therefore, I am going to turn these texts into numbers and compare them separately:
-4
-```
-#This has already been updated in Excel
-<1H OCEAN = 1
-INLAND = 2
-ISLAND = 3
-NEAR BAY =4
-NEAR OCEAN =5
-```
-Then, compare the ocean_proximity with median house value:
+Compare the ocean_proximity with median house value:
 
 ```{r}
-ggplot(data=df, aes(x=as.factor(proximity), y=median_house_value)) +
+ggplot(data=df, aes(x=as.factor(ocean_proximity), y=median_house_value)) +
   geom_boxplot() +xlab("ocean_proximity")
 ```
 
@@ -78,7 +67,9 @@ Time to normalize the data. Let's grab all values except for the median housing 
 
 ```
 df_stand <-df
-df_stand[,1:7] <- apply(df[,1:7], 2, scale)
+df_stand[,1:9] <- lapply(df[,1:9], function(x) if(is.numeric(x)){
+  scale(x, center=TRUE, scale=TRUE)
+} else x)
 trainRows <- createDataPartition(y = df_stand$median_house_value, p = 0.7, list = FALSE)
 
 train_set_stand <- df_stand[trainRows,]
@@ -101,8 +92,12 @@ test_set$knnmedian_house_value <- knnPred
 ```
 
 **Visualize the prediction results**
+
 *House Value vs KNN Predicted House Value*
-![000022](https://github.com/codingispink/Predict-House-Values-/assets/138828365/9b70e993-3725-448b-b42e-f7b369c536da)
+
+
+<img width="525" alt="hvl" src="https://github.com/codingispink/Predict-House-Values-With-KNN-Regression-Tree-and-Regression-Line/assets/138828365/64b49e50-c6d1-429d-8df1-43057cd04806">
+
 
 Overall, we see a positive correlation between the house value and KNN predicted house value, which is a really good thing. You can also visualize the error (predict - real) vs real house value.
 
@@ -138,10 +133,12 @@ rtree
 ``` {r }
 rpart.plot(rtree$finalModel, digit =-3)
 ```
-![000012](https://github.com/codingispink/Predict-House-Values-/assets/138828365/cee4a5ce-2dd6-46d3-a551-3879fad23223)
+
+<img width="525" alt="treeplot" src="https://github.com/codingispink/Predict-House-Values-With-KNN-Regression-Tree-and-Regression-Line/assets/138828365/35d25740-81ef-4f2d-a107-2865365bfb02">
+
 
 **Interpretation** 
-In this regression tree, the model predicts that those with median income less than $50,400 (5.04 in original data) will likely purchase a house that is around $173,547 while those with higher salary will likely purchase a house that costs up to $331,798. In the group of buyers that get paid less than $50,400, those with median income less than $30,070 (or 3.07) will likely to purchase a house that is around $135,015 and those with higher median income than that will purchase a house that is around $209,384.
+In this regression tree, the model predicts that those with median income less than $50,500 (5.05 in original data) will  be likely to purchase a house that is around $173,625 while those with higher salary will be likety to purchase a house that costs up to $332,732. In the group of buyers that get paid less than $50,500, those that purchases house inland will likely buy house up to $112,324 while the others will buy house up to $208,280.
 
 **Save the prediction results**
 ```{r }
@@ -156,7 +153,9 @@ ggplot(data=test_set, aes(x= median_house_value, y= treemedian_house_value)) +
   xlim(0,500000) + ylim(0,500000) +
   labs(x="House Value", y ="Decision Tree Predicted House Value")
 ```
-![000010](https://github.com/codingispink/Predict-House-Values-/assets/138828365/e7e0a6b8-60d4-4f92-ab7c-94af07fd0aff)
+
+<img width="525" alt="treehvl" src="https://github.com/codingispink/Predict-House-Values-With-KNN-Regression-Tree-and-Regression-Line/assets/138828365/5ada6f0c-a44b-4d68-a516-99b29b33aaab">
+
 
 **Compute performance metrics like above**
 
@@ -177,7 +176,8 @@ summary(lin_reg$finalModel)
 test_set$lmmedian_house_value <- predict(lin_reg, newdata = test_set)
 ```
 **Visualize the prediction results**
-![000010](https://github.com/codingispink/Predict-House-Values-/assets/138828365/262cfac1-3a18-4073-a177-b0ae838d6ece)
+
+<img width="525" alt="linear" src="https://github.com/codingispink/Predict-House-Values-With-KNN-Regression-Tree-and-Regression-Line/assets/138828365/283acdbf-8d16-4434-b7d6-73835e53e15f">
 
 Similarly, we can see that there is a positive correlation between real house value vs Linear Regression predicted house value, which means that the house value tends to be close to the linear regression predicted house value. Just to make sure that you can measure the accuracy, calcualate the metrics with postResample().
 
@@ -193,10 +193,10 @@ metrics
 
 **The result**
 ```
-                RMSE  Rsquared      MAE      MAPE    
-knnMetrics  64713.06 0.6837161 44839.00 0.2517936
-treeMetrics 90714.38 0.3767587 69885.75 0.4316204
-lmMetrics   75397.80 0.5696283 55730.46 0.4316204
+                 RMSE  Rsquared      MAE          
+knnMetrics  59358.97 0.7329569 40174.04 0.2181261
+treeMetrics 86297.93 0.4328938 65225.74 0.3835381
+lmMetrics   67463.80 0.6533610 49119.17 0.3835381
 ```
 
 #### Conclusion
