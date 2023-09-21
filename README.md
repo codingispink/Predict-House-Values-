@@ -87,7 +87,7 @@ test_set_stand <- df_stand[-trainRows,]
 train_set <-df[trainRows,]
 test_set <- df[-trainRows,]
 ```
-### 3. Predict House Values through KNN Clustering
+### 3. Predict House Values through KNN 
 We can train the model on the standardized data set using the function train(). View the result and make sure it is treated as numerical prediction. Then we can predict the house values on the test_set_stand.
 ```
 knn_model <- train(median_house_value~., train_set_stand, method = "knn")
